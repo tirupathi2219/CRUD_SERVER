@@ -1,11 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+require('./DBConnection')
 
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const authRoutes = require('./routes/AuthRoutes')
 const registerUsersData = []
 let userId = 0;
 app.post("/register", async (request, response) => {
@@ -24,23 +26,6 @@ app.post("/register", async (request, response) => {
         throw new Error("Please fill all fields");
     } catch(error) {
         console.error('21==', error.message);
-        return response.status(400).json({error: error.message});
-    }
-});
-
-app.post("/login", async (request, response) => {
-    const {email, password} = request.body;
-    try {
-        if (email && password) {
-            if(registerUsersData.filter((user) => user.email.includes(email)).length){
-                return response.status(200).json(registerUsersData.find((val) => val.email === email));
-            } else {
-                throw new Error("New user, Create an Account")
-            }
-        }
-        throw new Error("Please fill all fields");
-    } catch(error) {
-        console.error('40==', error.message);
         return response.status(400).json({error: error.message});
     }
 });
@@ -83,6 +68,7 @@ app.delete('/deleteUser', async (req, resp) => {
     }
 })
 
+app.use('/auth', authRoutes)
 app.listen(3214, () => {
     console.log("29== Server is running on port 3214", registerUsersData);
 });

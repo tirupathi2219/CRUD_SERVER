@@ -8,7 +8,7 @@ const userLogin = async (request, response) => {
         if (!email || !password) {
             throw new Error("Please fill all fields");
         }
-        const result = await UserModel.findOne({email: email})
+        const result = await UserModel.findOne({ email: email })
         if (!result) {
             throw new Error('User not found')
         }
@@ -25,54 +25,65 @@ const userLogin = async (request, response) => {
 const createUser = async (request, response) => {
     try {
         const { name, email, password, mobile } = request.body;
-        const user = await UserModel.create({ name, email, password, mobile } )
+        const user = await UserModel.create({ name, email, password, mobile })
         response.send(user)
-    } catch(error) {
+    } catch (error) {
         console.error('21==', error.message);
         if (error.message.includes("email_1 dup ")) {
-            return response.status(400).json({error: "Enter new mail..."});
+            return response.status(400).json({ error: "Enter new mail..." });
         }
-        return response.status(400).json({error: error.message});
+        return response.status(400).json({ error: error.message });
     }
 }
 
-const getAllUsers = async (req,res)=> {
+const getAllUsers = async (req, res) => {
     try {
         const users = await UserModel.find()
-       res.send(users) 
+        res.send(users)
     } catch (e) {
-        res.status(403).json({error: e.message})
+        res.status(403).json({ error: e.message })
     }
 }
 
-const updateUser =async (req,res) => {
+const updateUser = async (req, res) => {
     try {
-        const {id, data} = req.body
-        console.log({id, data})
-        const updateData = await UserModel.findOneAndUpdate({_id: id}, data, {new : true})
+        const { id, data } = req.body
+        console.log({ id, data })
+        const updateData = await UserModel.findOneAndUpdate({ _id: id }, data, { new: true })
         res.send(updateData)
     } catch (e) {
-        res.status(403).json({error: e.message})
+        res.status(403).json({ error: e.message })
     }
 }
 
-const deleteUser =async (req,res) => {
+const deleteUser = async (req, res) => {
     try {
-       const {id} = req.body
-       const deletedUser = await UserModel.findOneAndDelete({_id: id})
-       console.log(deletedUser)
-       res.send(deletedUser)
+        const { id } = req.body
+        const deletedUser = await UserModel.findOneAndDelete({ _id: id })
+        console.log(deletedUser)
+        res.send(deletedUser)
     }
     catch (e) {
-        res.status(403).json({error: e.message})
+        res.status(403).json({ error: e.message })
     }
 }
 
+const updateUsersChat = async (req, res) => {
+    try {
+        console.log(req.body)
+        res.send(req.body)
+    }
+    catch (e) {
+        console.log(e)
+        res.send(e)
+    }
+}
 
 module.exports = {
     userLogin,
     createUser,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    updateUsersChat,
 }

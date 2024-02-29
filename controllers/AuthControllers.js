@@ -1,5 +1,4 @@
 const { UserModel } = require("../models/AuthModel");
-const {chatModel} = require("../models/UsersChatModel")
 
 
 const userLogin = async (request, response) => {
@@ -67,19 +66,7 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const updateUsersChat = async (req, res) => {
-    const {user, chat} = req.body
-    try {
-        const createChat = await chatModel.create({user: user.email, chat})
-        const totalchat = await chatModel.find()
-        console.log(createChat)
-        res.send({createChat, totalchat})
-    }
-    catch (e) {
-        console.log(e)
-        res.send(e)
-    }
-}
+
 
 module.exports = {
     userLogin,
@@ -87,5 +74,4 @@ module.exports = {
     getAllUsers,
     updateUser,
     deleteUser,
-    updateUsersChat,
 }

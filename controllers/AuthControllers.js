@@ -1,4 +1,5 @@
 const { UserModel } = require("../models/AuthModel");
+const {chatModel} = require("../models/UsersChatModel")
 
 
 const userLogin = async (request, response) => {
@@ -17,7 +18,6 @@ const userLogin = async (request, response) => {
         }
         response.send(result)
     } catch (error) {
-        console.error('40==', error.message);
         return response.status(400).json({ error: error.message });
     }
 }
@@ -28,7 +28,6 @@ const createUser = async (request, response) => {
         const user = await UserModel.create({ name, email, password, mobile })
         response.send(user)
     } catch (error) {
-        console.error('21==', error.message);
         if (error.message.includes("email_1 dup ")) {
             return response.status(400).json({ error: "Enter new mail..." });
         }
@@ -69,9 +68,12 @@ const deleteUser = async (req, res) => {
 }
 
 const updateUsersChat = async (req, res) => {
+    const {user, chat} = req.body
     try {
-        console.log(req.body)
-        res.send(req.body)
+        const createChat = await chatModel.create({user: user.email, chat})
+        const totalchat = await chatModel.find()
+        console.log(createChat)
+        res.send({createChat, totalchat})
     }
     catch (e) {
         console.log(e)

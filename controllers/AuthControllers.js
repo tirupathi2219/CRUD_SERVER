@@ -59,7 +59,8 @@ const deleteUser = async (req, res) => {
         const { id } = req.body
         const deletedUser = await UserModel.findOneAndDelete({ _id: id })
         console.log(deletedUser)
-        res.send(deletedUser)
+        const updatedUsers = await UserModel.find()
+        res.send(updatedUsers)
     }
     catch (e) {
         res.status(403).json({ error: e.message })

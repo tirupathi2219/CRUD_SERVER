@@ -1,19 +1,32 @@
 const express = require("express");
 const cors = require("cors");
-require('./DBConnection')
+const http = require("node:http");
+require('./DBConnection');
+const socketIo = require("socket.io");
 
 const app = express();
 app.use(cors({ origin: "*" }));
+const server = http.createServer(app)
+const io = socketIo(server, {cors: {origin: "*"}})
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const authRoutes = require('./routes/AuthRoutes')
-const usersRoutes = require('./routes/UsersChatRoutes')
-const registerUsersData = []
-let userId = 0;
-console.log('70==')
+io.on('connection', (socket) => {
+    // Handle incoming messages
+    socket.on('setchat message', (msg, user) => {
+        console.log('message: ', msg, user);
+        // Broadcast the message to all connected clients
+        io.emit('getchat message', msg, user);
+    });
+    socket.on('disconect', () => {
+        console.log('client disconnected ');
+    })
+})
+
+const authRoutes = require('./routes/AuthRoutes');
+const usersRoutes = require('./routes/UsersChatRoutes');
 app.use('/auth', authRoutes)
 app.use('/users/', usersRoutes)
-app.listen(3214, () => {
-    console.log("29== Server is running on port 3214", registerUsersData);
+server.listen(8000, () => {
+    console.log("29== Server is running on port 8000");
 });

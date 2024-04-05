@@ -5,7 +5,6 @@ const updateUsersChat = async (req, res) => {
     try {
         const createChat = await chatModel.create({user: user.email, chat})
         const totalchat = await chatModel.find()
-        console.log(createChat)
         res.send({createChat, totalchat})
     }
     catch (e) {

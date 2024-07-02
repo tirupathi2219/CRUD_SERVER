@@ -4,8 +4,10 @@
   "description": "This is my node project",
   "main": "server.js",
   "scripts": {
+     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server"
+
   },
   "author": "",
   "license": "ISC",

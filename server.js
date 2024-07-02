@@ -4,13 +4,14 @@ const cors = require("cors");
 const http = require("node:http");
 require('./DBConnection');
 const socketIo = require("socket.io");
-
+const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(cors({ origin: "*" }));
 const server = http.createServer(app)
 const io = socketIo(server, { cors: { origin: "*" } })
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 
 io.on('connection', (socket) => {
     // Handle incoming messages
@@ -30,6 +31,6 @@ const authRoutes = require('./routes/AuthRoutes');
 const usersRoutes = require('./routes/UsersChatRoutes');
 app.use('/auth', authRoutes)
 app.use('/users/', usersRoutes)
-server.listen(8000, () => {
+server.listen(PORT, () => {
     console.log("29== Server is running on port 8000");
 });
